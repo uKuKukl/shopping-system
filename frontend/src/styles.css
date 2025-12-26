@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;600&display=swap');
+
+:root {
+  --bg: radial-gradient(1200px 800px at 10% 10%, #f4efe7 0%, #f8f3ec 35%, #f6f6f2 100%);
+  --card: #fff7ee;
+  --ink: #1e1b16;
+  --muted: #6f6458;
+  --accent: #d97706;
+  --accent-2: #0f766e;
+  --border: #eadfce;
+  --shadow: 0 12px 30px rgba(30, 27, 22, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Space Grotesk', 'Newsreader', sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.page {
+  padding: 24px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255, 248, 240, 0.9);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+}
+
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 20px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.brand {
+  font-family: 'Newsreader', serif;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.layout {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-inner {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

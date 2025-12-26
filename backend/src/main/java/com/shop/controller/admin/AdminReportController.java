@@ -1,0 +1,38 @@
+package com.shop.controller.admin;
+
+import com.shop.common.ApiResponse;
+import com.shop.dto.admin.CategorySalesReport;
+import com.shop.dto.admin.DailySalesReport;
+import com.shop.dto.admin.ProductSalesReport;
+import com.shop.service.ReportService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/admin/reports")
+public class AdminReportController {
+
+    private final ReportService reportService;
+
+    public AdminReportController(ReportService reportService) {
+        this.reportService = reportService;
+    }
+
+    @GetMapping("/product-sales")
+    public ApiResponse<List<ProductSalesReport>> productSales() {
+        return ApiResponse.success(reportService.productSales());
+    }
+
+    @GetMapping("/category-sales")
+    public ApiResponse<List<CategorySalesReport>> categorySales() {
+        return ApiResponse.success(reportService.categorySales());
+    }
+
+    @GetMapping("/daily-sales")
+    public ApiResponse<List<DailySalesReport>> dailySales() {
+        return ApiResponse.success(reportService.dailySales());
+    }
+}

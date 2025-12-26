@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/shopdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:123456}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:dev-secret-change-me-dev-secret-change-me}
+    expire-minutes: ${JWT_EXPIRE_MINUTES:120}
+
+cors:
+  allowed-origins: http://localhost:5173
