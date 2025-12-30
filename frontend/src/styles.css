@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;600&display=swap');
-
 :root {
   --bg: radial-gradient(1200px 800px at 10% 10%, #f4efe7 0%, #f8f3ec 35%, #f6f6f2 100%);
   --card: #fff7ee;
@@ -17,7 +15,7 @@
 
 body {
   margin: 0;
-  font-family: 'Space Grotesk', 'Newsreader', sans-serif;
+  font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   color: var(--ink);
   background: var(--bg);
 }
