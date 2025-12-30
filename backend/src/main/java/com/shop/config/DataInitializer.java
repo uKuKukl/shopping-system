@@ -57,10 +57,24 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
+        ensureAdminUser();
         List<Product> products = ensureProducts();
         if (orderRepository.count() == 0 && !products.isEmpty()) {
             seedOrders(products);
         }
+    }
+
+    private void ensureAdminUser() {
+        userRepository.findByUsername("admin").orElseGet(() -> {
+            User admin = new User();
+            admin.setUsername("admin");
+            admin.setEmail("admin@shop.com");
+            admin.setPhone("13900000000");
+            admin.setPasswordHash(passwordEncoder.encode("123456"));
+            admin.setRole(UserRole.ADMIN);
+            admin.setStatus(UserStatus.ACTIVE);
+            return userRepository.save(admin);
+        });
     }
 
     private List<Product> ensureProducts() {
