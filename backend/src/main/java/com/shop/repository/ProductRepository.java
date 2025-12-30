@@ -13,8 +13,13 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findByStatus(ProductStatus status, Pageable pageable);
 
-    @Query("select p from Product p where p.status = :status and (p.name like %:q% or p.description like %:q%)")
-    Page<Product> search(@Param("status") ProductStatus status, @Param("q") String q, Pageable pageable);
+    Page<Product> findByStatusAndCategoryId(ProductStatus status, Long categoryId, Pageable pageable);
+
+    @Query("select p from Product p where p.status = :status and (:categoryId is null or p.categoryId = :categoryId) and (p.name like %:q% or p.description like %:q%)")
+    Page<Product> search(@Param("status") ProductStatus status,
+                         @Param("q") String q,
+                         @Param("categoryId") Long categoryId,
+                         Pageable pageable);
 
     @Modifying
     @Query("update Product p set p.stock = p.stock - :qty where p.id = :pid and p.stock >= :qty")

@@ -1,6 +1,7 @@
 package com.shop.service;
 
 import com.shop.dto.admin.CategorySalesReport;
+import com.shop.dto.admin.DailyHotProductReport;
 import com.shop.dto.admin.DailySalesReport;
 import com.shop.dto.admin.ProductSalesReport;
 import jakarta.persistence.EntityManager;
@@ -44,6 +45,40 @@ public class ReportService {
         for (Object[] row : rows) {
             result.add(new DailySalesReport(((java.sql.Date) row[0]).toLocalDate(),
                     ((Number) row[1]).longValue(), (BigDecimal) row[2]));
+        }
+        return result;
+    }
+
+    public List<DailyHotProductReport> dailyHotProducts(int topN) {
+        String sql = """
+                select paid_date, product_id, product_name, total_qty, total_amount
+                from (
+                    select
+                        date(o.paid_at) as paid_date,
+                        p.id as product_id,
+                        p.name as product_name,
+                        sum(oi.quantity) as total_qty,
+                        sum(oi.subtotal) as total_amount,
+                        row_number() over (partition by date(o.paid_at) order by sum(oi.quantity) desc) as rn
+                    from order_items oi
+                    join orders o on o.id = oi.order_id
+                    join products p on p.id = oi.product_id
+                    where o.status in ('PAID','SHIPPED','COMPLETED') and o.paid_at is not null
+                    group by paid_date, product_id, product_name
+                ) t
+                where t.rn <= :topN
+                order by t.paid_date desc, t.total_qty desc
+                """;
+        List<Object[]> rows = entityManager.createNativeQuery(sql)
+                .setParameter("topN", topN)
+                .getResultList();
+        List<DailyHotProductReport> result = new ArrayList<>();
+        for (Object[] row : rows) {
+            result.add(new DailyHotProductReport(((java.sql.Date) row[0]).toLocalDate(),
+                    ((Number) row[1]).longValue(),
+                    (String) row[2],
+                    ((Number) row[3]).longValue(),
+                    (BigDecimal) row[4]));
         }
         return result;
     }

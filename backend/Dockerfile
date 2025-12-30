@@ -1,10 +1,10 @@
-FROM registry.cn-hangzhou.aliyuncs.com/library/maven:3.9.9-eclipse-temurin-17 AS build
+FROM ccr.ccs.tencentyun.com/library/maven:3.9.9-eclipse-temurin-17 AS build
 WORKDIR /app
 COPY pom.xml ./
 COPY src ./src
 RUN mvn -q -DskipTests package
 
-FROM registry.cn-hangzhou.aliyuncs.com/library/eclipse-temurin:17-jre
+FROM ccr.ccs.tencentyun.com/library/eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080

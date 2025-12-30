@@ -7,8 +7,19 @@
         <el-button type="primary" @click="search">搜索</el-button>
         <el-button @click="resetSearch">重置</el-button>
       </div>
-      <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
-        <el-tag v-for="cat in categories" :key="cat.id" type="warning">{{ cat.name }}</el-tag>
+      <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+        <el-tag :type="selectedCategoryId === null ? 'warning' : 'info'" @click="selectCategory(null)" style="cursor: pointer;">
+          全部
+        </el-tag>
+        <el-tag
+          v-for="cat in categories"
+          :key="cat.id"
+          :type="selectedCategoryId === cat.id ? 'warning' : 'info'"
+          @click="selectCategory(cat.id)"
+          style="cursor: pointer;"
+        >
+          {{ cat.name }}
+        </el-tag>
       </div>
     </div>
 
@@ -50,13 +61,16 @@ const total = ref(0)
 const page = ref(0)
 const size = ref(9)
 const query = ref('')
+const selectedCategoryId = ref(null)
 
 const loadCategories = async () => {
   categories.value = await api.get('/api/categories')
 }
 
 const loadProducts = async () => {
-  const data = await api.get('/api/products', { params: { page: page.value, size: size.value } })
+  const data = await api.get('/api/products', {
+    params: { page: page.value, size: size.value, categoryId: selectedCategoryId.value }
+  })
   products.value = data.content
   total.value = data.totalElements
 }
@@ -65,18 +79,31 @@ const search = async () => {
   if (!query.value) {
     return loadProducts()
   }
-  const data = await api.get('/api/products/search', { params: { q: query.value, page: page.value, size: size.value } })
+  const data = await api.get('/api/products/search', {
+    params: { q: query.value, page: page.value, size: size.value, categoryId: selectedCategoryId.value }
+  })
   products.value = data.content
   total.value = data.totalElements
 }
 
 const resetSearch = () => {
   query.value = ''
+  page.value = 0
   loadProducts()
 }
 
 const handlePage = (p) => {
   page.value = p - 1
+  if (query.value) {
+    search()
+  } else {
+    loadProducts()
+  }
+}
+
+const selectCategory = (categoryId) => {
+  selectedCategoryId.value = categoryId
+  page.value = 0
   if (query.value) {
     search()
   } else {

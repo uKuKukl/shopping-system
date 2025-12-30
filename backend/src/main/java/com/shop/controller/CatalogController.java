@@ -38,16 +38,20 @@ public class CatalogController {
 
     @GetMapping("/products")
     public ApiResponse<Page<Product>> products(@RequestParam(defaultValue = "0") int page,
-                                                @RequestParam(defaultValue = "10") int size) {
-        Page<Product> result = productRepository.findByStatus(ProductStatus.ON_SALE, PageRequest.of(page, size));
+                                                @RequestParam(defaultValue = "10") int size,
+                                                @RequestParam(required = false) Long categoryId) {
+        Page<Product> result = categoryId == null
+                ? productRepository.findByStatus(ProductStatus.ON_SALE, PageRequest.of(page, size))
+                : productRepository.findByStatusAndCategoryId(ProductStatus.ON_SALE, categoryId, PageRequest.of(page, size));
         return ApiResponse.success(result);
     }
 
     @GetMapping("/products/search")
     public ApiResponse<Page<Product>> search(@RequestParam("q") String q,
                                               @RequestParam(defaultValue = "0") int page,
-                                              @RequestParam(defaultValue = "10") int size) {
-        Page<Product> result = productRepository.search(ProductStatus.ON_SALE, q, PageRequest.of(page, size));
+                                              @RequestParam(defaultValue = "10") int size,
+                                              @RequestParam(required = false) Long categoryId) {
+        Page<Product> result = productRepository.search(ProductStatus.ON_SALE, q, categoryId, PageRequest.of(page, size));
         return ApiResponse.success(result);
     }
 

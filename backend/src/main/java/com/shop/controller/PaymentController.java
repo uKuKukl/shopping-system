@@ -4,6 +4,7 @@ import com.shop.common.ApiResponse;
 import com.shop.dto.payment.PaymentRequest;
 import com.shop.dto.payment.PaymentResponse;
 import com.shop.service.PaymentService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,7 +18,7 @@ public class PaymentController {
     }
 
     @PostMapping
-    public ApiResponse<PaymentResponse> pay(@RequestBody PaymentRequest request) {
+    public ApiResponse<PaymentResponse> pay(@Valid @RequestBody PaymentRequest request) {
         return ApiResponse.success(paymentService.pay(request));
     }
 }
