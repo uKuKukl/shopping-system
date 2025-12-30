@@ -21,4 +21,4 @@ app:
     expire-minutes: ${JWT_EXPIRE_MINUTES:120}
 
 cors:
-  allowed-origins: http://localhost:5173
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
