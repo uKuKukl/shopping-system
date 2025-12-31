@@ -32,22 +32,32 @@ public class AuthService {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             throw new BusinessException("用户名已存在");
         }
-        if (request.getEmail() != null && userRepository.findByEmail(request.getEmail()).isPresent()) {
+        String email = normalize(request.getEmail());
+        String phone = normalize(request.getPhone());
+        if (email != null && userRepository.findByEmail(email).isPresent()) {
             throw new BusinessException("邮箱已存在");
         }
-        if (request.getPhone() != null && userRepository.findByPhone(request.getPhone()).isPresent()) {
+        if (phone != null && userRepository.findByPhone(phone).isPresent()) {
             throw new BusinessException("手机号已存在");
         }
         User user = new User();
         user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPhone(request.getPhone());
+        user.setEmail(email);
+        user.setPhone(phone);
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         user.setRole(UserRole.CUSTOMER);
         user.setStatus(UserStatus.ACTIVE);
         userRepository.save(user);
         String token = jwtService.generateToken(user.getId(), user.getUsername(), user.getRole().name());
         return new AuthResponse(token, new UserInfo(user.getId(), user.getUsername(), user.getRole()));
+    }
+
+    private String normalize(String value) {
+        if (value == null) {
+            return null;
+        }
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 
     public AuthResponse login(LoginRequest request) {
