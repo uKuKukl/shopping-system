@@ -55,6 +55,10 @@ a {
   backdrop-filter: blur(8px);
 }
 
+.el-message {
+  top: 72px !important;
+}
+
 .navbar-inner {
   display: flex;
   align-items: center;

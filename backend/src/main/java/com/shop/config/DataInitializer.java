@@ -90,23 +90,23 @@ public class DataInitializer implements CommandLineRunner {
         }
 
         Product p1 = buildProduct(categories.get(0).getId(), "HOME-1001", "暖光香薰灯",
-                "柔和氛围灯，适合卧室与客厅使用。", new BigDecimal("129.00"), 50);
-        Product p2 = buildProduct(categories.get(1).getId(), "TECH-2001", "无线降噪耳机",
-                "主动降噪，续航持久，适合通勤。", new BigDecimal("699.00"), 30);
+                "柔和氛围灯，适合卧室与客厅使用.", new BigDecimal("129.00"), 50);
+        Product p2 = buildProduct(categories.get(1).getId(), "TECH-2001", "Sony/索尼 WH-1000XM6 旗舰头戴式无线蓝牙降噪耳机",
+                "主动降噪，续航持久，适合通勤.", new BigDecimal("2580.00"), 30);
         Product p3 = buildProduct(categories.get(2).getId(), "KITCH-3001", "不粘煎锅 28cm",
-                "快速导热，易清洁。", new BigDecimal("159.00"), 80);
-        Product p4 = buildProduct(categories.get(1).getId(), "TECH-2002", "便携充电宝 20000mAh",
-                "双口输出，支持快充。", new BigDecimal("189.00"), 120);
-        Product p5 = buildProduct(categories.get(0).getId(), "HOME-1002", "软云抱枕",
-                "亲肤面料，支撑力好。", new BigDecimal("79.00"), 100);
+                "平底锅家用铁锅煎蛋锅平底煎盘煎锅.", new BigDecimal("159.00"), 80);
+        Product p4 = buildProduct(categories.get(1).getId(), "TECH-2002", "CUKTECH酷态科25号电能块SE",
+                "自带线120W移动电源25000毫安时PD快充.", new BigDecimal("189.00"), 120);
+        Product p5 = buildProduct(categories.get(0).getId(), "HOME-1002", "猫咪抱枕",
+                "睡觉玩偶长条毛绒抱睡床上大夹腿长娃娃.", new BigDecimal("79.00"), 100);
 
         productRepository.saveAll(List.of(p1, p2, p3, p4, p5));
 
-        addImage(p1, "https://picsum.photos/seed/home1001/800/600");
-        addImage(p2, "https://picsum.photos/seed/tech2001/800/600");
-        addImage(p3, "https://picsum.photos/seed/kitch3001/800/600");
-        addImage(p4, "https://picsum.photos/seed/tech2002/800/600");
-        addImage(p5, "https://picsum.photos/seed/home1002/800/600");
+        addImage(p1, "https://img.alicdn.com/imgextra/i2/3365235991/O1CN01UTKx4p1u7ver2NqJM_!!3365235991.jpg_q50.jpg_.webp");
+        addImage(p2, "https://gw.alicdn.com/imgextra/O1CN01PIHg9j27QKnv2aXWN_!!2948497791.jpg_q50.jpg_.webp");
+        addImage(p3, "https://img.alicdn.com/imgextra/i4/78599935/O1CN01XQ0YtL2NGHamgQx1m_!!78599935.jpg_q50.jpg_.webp");
+        addImage(p4, "https://img.alicdn.com/imgextra/i4/2215566863422/O1CN01dFDpPV1b9KRoSqjti_!!4611686018427382846-0-item_pic.jpg_q50.jpg_.webp");
+        addImage(p5, "https://img.alicdn.com/imgextra/i4/2094580882/O1CN018uJkc81IO0MefLzaR_!!4611686018427380882-0-item_pic.jpg_q50.jpg_.webp");
         return List.of(p1, p2, p3, p4, p5);
     }
 

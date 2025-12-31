@@ -29,11 +29,17 @@ api.interceptors.response.use(
   (error) => {
     const status = error?.response?.status
     if (status === 401) {
+      ElMessage.warning('请先登录')
       localStorage.removeItem('token')
       localStorage.removeItem('user')
       if (location.pathname !== '/login') {
         location.href = '/login'
       }
+      return Promise.reject(error)
+    }
+    if (status === 403) {
+      ElMessage.warning('没有权限访问')
+      return Promise.reject(error)
     }
     ElMessage.error(error?.response?.data?.message || '网络错误')
     return Promise.reject(error)
