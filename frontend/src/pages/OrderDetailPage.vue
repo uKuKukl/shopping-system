@@ -1,6 +1,12 @@
 <template>
   <div class="page">
-    <div class="section-title">订单详情</div>
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">订单</p>
+        <h1>订单详情</h1>
+        <p class="page-subtitle">订单号：{{ order?.orderNo || '加载中' }}</p>
+      </div>
+    </header>
     <div class="card" style="padding: 16px;">
       <div class="muted">订单号：{{ order?.orderNo }}</div>
       <div class="muted">状态：{{ order?.status }}</div>

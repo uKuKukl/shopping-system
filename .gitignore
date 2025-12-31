@@ -6,3 +6,5 @@ build/
 .vscode/
 .DS_Store/backend/target/
 frontend/node_modules/
+.github/
+.shared/

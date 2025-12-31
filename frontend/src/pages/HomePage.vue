@@ -1,6 +1,12 @@
 <template>
   <div class="page">
-    <div class="section-title">精选商品</div>
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">首页</p>
+        <h1>精选商品</h1>
+        <p class="page-subtitle">搜索、筛选，找到想要的商品。</p>
+      </div>
+    </header>
     <div class="card" style="padding: 16px; margin-bottom: 20px;">
       <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
         <el-input v-model="query" placeholder="搜索商品" style="max-width: 320px;" />

@@ -1,7 +1,11 @@
 <template>
   <div class="page">
     <div class="card" style="max-width: 420px; margin: 48px auto; padding: 24px;">
-      <div class="section-title">注册</div>
+      <div class="auth-head">
+        <p class="eyebrow">注册</p>
+        <h1 class="auth-title">创建账户</h1>
+        <p class="page-subtitle">填写信息，开始你的购物之旅。</p>
+      </div>
       <el-form :model="form" label-position="top">
         <el-form-item label="用户名">
           <el-input v-model="form.username" placeholder="请输入用户名" />
@@ -70,3 +74,18 @@ const handleRegister = async () => {
   router.push('/')
 }
 </script>
+
+<style scoped>
+.auth-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.auth-title {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+</style>

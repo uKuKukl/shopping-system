@@ -1,6 +1,12 @@
 <template>
   <div class="page">
-    <div class="section-title">商品管理</div>
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">后台</p>
+        <h1>商品管理</h1>
+        <p class="page-subtitle">新增、上架/下架，维护商品与图片。</p>
+      </div>
+    </header>
     <div class="card" style="padding: 16px; margin-bottom: 16px;">
       <el-form :model="form" label-position="top">
         <el-row :gutter="12">

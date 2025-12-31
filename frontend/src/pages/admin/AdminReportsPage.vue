@@ -1,81 +1,108 @@
 <template>
-  <div class="page">
-    <div class="section-title">报表</div>
-    <el-row :gutter="16">
-      <el-col :xs="24" :md="8">
-        <div class="card" style="padding: 16px;">
-          <div class="section-title" style="font-size: 18px;">商品销售</div>
-          <div v-for="row in productSales" :key="row.productId" style="margin-bottom: 8px;">
-            {{ row.productName }} - {{ row.totalQty }} 件 / ¥{{ row.totalAmount }}
-          </div>
-        </div>
-      </el-col>
-      <el-col :xs="24" :md="8">
-        <div class="card" style="padding: 16px;">
-          <div class="section-title" style="font-size: 18px;">分类销售</div>
-          <div v-for="row in categorySales" :key="row.categoryId" style="margin-bottom: 8px;">
-            {{ row.categoryName }} - {{ row.totalQty }} 件 / ¥{{ row.totalAmount }}
-          </div>
-        </div>
-      </el-col>
-      <el-col :xs="24" :md="8">
-        <div class="card" style="padding: 16px;">
-          <div class="section-title" style="font-size: 18px;">每日销售</div>
-          <div ref="chartRef" class="chart" v-if="dailySales.length"></div>
-          <div v-else class="muted">暂无数据</div>
-        </div>
-      </el-col>
-    </el-row>
+  <div class="page reports-page">
+    <div class="page-header">
+      <div>
+        <p class="eyebrow">报表中心</p>
+        <h1>每日经营概览</h1>
+        <p class="muted">快速查看商品/品类表现、日度走势与热销榜，保持运营节奏。</p>
+      </div>
+    </div>
 
-    <el-row :gutter="16" style="margin-top: 16px;">
-      <el-col :span="24">
-        <div class="card" style="padding: 16px;">
-          <div class="section-title" style="font-size: 18px;">每日热销（Top {{ topN }}）</div>
-          <el-table v-if="dailyHotGroups.length" :data="dailyHotGroups" style="width: 100%">
-            <el-table-column prop="paidDate" label="日期" width="140" />
-            <el-table-column label="热销商品">
-              <template #default="scope">
-                <div v-for="item in scope.row.items" :key="item.productId" style="margin-bottom: 6px;">
-                  {{ item.productName }} - {{ item.totalQty }} 件 / ¥{{ item.totalAmount }}
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <div v-else class="muted">暂无数据</div>
-        </div>
-      </el-col>
-    </el-row>
-
-    <el-row :gutter="16" style="margin-top: 16px;">
-      <el-col :span="24">
-        <div class="card" style="padding: 16px;">
-          <div class="section-title" style="font-size: 18px;">每日销售明细查询</div>
-          <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 12px;">
-            <el-date-picker
-              v-model="detailDate"
-              type="date"
-              placeholder="选择日期"
-              format="YYYY-MM-DD"
-              value-format="YYYY-MM-DD"
-            />
-            <el-button type="primary" @click="loadDailyDetail">查询</el-button>
+    <div class="grid grid-3">
+      <section class="card panel">
+        <header class="panel-head">
+          <h3>商品销售</h3>
+          <span class="tag">Top</span>
+        </header>
+        <div class="panel-list" v-if="productSales.length">
+          <div class="row" v-for="row in productSales" :key="row.productId">
+            <div class="name">{{ row.productName }}</div>
+            <div class="meta">{{ row.totalQty }} 件 · ¥{{ row.totalAmount }}</div>
           </div>
-          <el-table
-            v-if="dailySalesDetailWithSummary.length"
-            :data="dailySalesDetailWithSummary"
-            style="width: 100%"
-            :row-class-name="rowClassName"
-          >
-            <el-table-column prop="paidDate" label="日期" width="140" />
-            <el-table-column prop="productName" label="商品" />
-            <el-table-column prop="totalQty" label="销量" width="100" />
-            <el-table-column prop="orderCount" label="订单数" width="100" />
-            <el-table-column prop="totalAmount" label="营业额" width="140" />
-          </el-table>
-          <div v-else class="muted">暂无数据</div>
         </div>
-      </el-col>
-    </el-row>
+        <div v-else class="muted">暂无数据</div>
+      </section>
+
+      <section class="card panel">
+        <header class="panel-head">
+          <h3>分类销售</h3>
+          <span class="tag soft">Overview</span>
+        </header>
+        <div class="panel-list" v-if="categorySales.length">
+          <div class="row" v-for="row in categorySales" :key="row.categoryId">
+            <div class="name">{{ row.categoryName }}</div>
+            <div class="meta">{{ row.totalQty }} 件 · ¥{{ row.totalAmount }}</div>
+          </div>
+        </div>
+        <div v-else class="muted">暂无数据</div>
+      </section>
+
+      <section class="card panel">
+        <header class="panel-head">
+          <h3>每日销售</h3>
+          <span class="tag soft">趋势</span>
+        </header>
+        <div ref="chartRef" class="chart" v-if="dailySales.length"></div>
+        <div v-else class="muted">暂无数据</div>
+      </section>
+    </div>
+
+    <section class="card panel">
+      <header class="panel-head">
+        <div>
+          <p class="eyebrow">热销榜</p>
+          <h3>每日热销（Top {{ topN }}）</h3>
+        </div>
+      </header>
+      <el-table v-if="dailyHotGroups.length" :data="dailyHotGroups" style="width: 100%" size="large">
+        <el-table-column prop="paidDate" label="日期" width="140" />
+        <el-table-column label="热销商品">
+          <template #default="scope">
+            <div class="hot-list">
+              <div v-for="item in scope.row.items" :key="item.productId" class="hot-item">
+                <span class="name">{{ item.productName }}</span>
+                <span class="meta">{{ item.totalQty }} 件 · ¥{{ item.totalAmount }}</span>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div v-else class="muted">暂无数据</div>
+    </section>
+
+    <section class="card panel">
+      <header class="panel-head">
+        <div>
+          <p class="eyebrow">明细</p>
+          <h3>每日销售明细查询</h3>
+        </div>
+        <div class="filters">
+          <el-date-picker
+            v-model="detailDate"
+            type="date"
+            placeholder="选择日期"
+            format="YYYY-MM-DD"
+            value-format="YYYY-MM-DD"
+          />
+          <el-button type="primary" @click="loadDailyDetail">查询</el-button>
+        </div>
+      </header>
+
+      <el-table
+        v-if="dailySalesDetailWithSummary.length"
+        :data="dailySalesDetailWithSummary"
+        style="width: 100%"
+        :row-class-name="rowClassName"
+        size="large"
+      >
+        <el-table-column prop="paidDate" label="日期" width="140" />
+        <el-table-column prop="productName" label="商品" />
+        <el-table-column prop="totalQty" label="销量" width="100" />
+        <el-table-column prop="orderCount" label="订单数" width="100" />
+        <el-table-column prop="totalAmount" label="营业额" width="140" />
+      </el-table>
+      <div v-else class="muted">暂无数据</div>
+    </section>
   </div>
 </template>
 
@@ -156,17 +183,17 @@ const renderChart = () => {
         return `${item.axisValue}<br/>销售额：¥${item.data}`
       }
     },
-    grid: { left: 40, right: 16, top: 20, bottom: 40 },
+    grid: { left: 40, right: 16, top: 24, bottom: 40 },
     xAxis: {
       type: 'category',
       data: labels,
-      axisLabel: { rotate: 30, color: '#6f6458' },
+      axisLabel: { rotate: 30, color: '#5c6a7b' },
       axisTick: { alignWithLabel: true }
     },
     yAxis: {
       type: 'value',
-      axisLabel: { color: '#6f6458' },
-      splitLine: { lineStyle: { color: '#eee4d6' } }
+      axisLabel: { color: '#5c6a7b' },
+      splitLine: { lineStyle: { color: '#e2ecf5' } }
     },
     series: [
       {
@@ -177,8 +204,8 @@ const renderChart = () => {
         itemStyle: {
           borderRadius: [8, 8, 0, 0],
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: '#f59e0b' },
-            { offset: 1, color: '#d97706' }
+            { offset: 0, color: '#7cc2ff' },
+            { offset: 1, color: '#2bb9a9' }
           ])
         }
       }
@@ -240,5 +267,140 @@ const dailyHotGroups = computed(() => {
 
 .summary-row td {
   font-weight: 600;
+}
+
+.reports-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.page-header {
+  background: linear-gradient(120deg, rgba(43, 185, 169, 0.1), rgba(124, 194, 255, 0.1));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+}
+
+.page-header h1 {
+  margin: 6px 0 4px;
+  font-size: 26px;
+  letter-spacing: -0.01em;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+}
+
+.grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.panel {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.panel-head h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.tag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(43, 185, 169, 0.12);
+  color: #2bb9a9;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.tag.soft {
+  background: rgba(124, 194, 255, 0.14);
+  color: #3c8edc;
+}
+
+.panel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.row .name {
+  font-weight: 600;
+}
+
+.row .meta {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.hot-list {
+  display: grid;
+  gap: 6px;
+}
+
+.hot-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.hot-item .name {
+  font-weight: 600;
+}
+
+.hot-item .meta {
+  color: var(--muted);
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .panel-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .hot-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filters {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 </style>

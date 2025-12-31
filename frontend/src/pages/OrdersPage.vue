@@ -1,6 +1,12 @@
 <template>
   <div class="page">
-    <div class="section-title">我的订单</div>
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">订单</p>
+        <h1>我的订单</h1>
+        <p class="page-subtitle">查看状态、取消未支付订单，或进入详情。</p>
+      </div>
+    </header>
     <div class="card" style="padding: 16px;">
       <el-table v-if="orders.length" :data="orders" style="width: 100%">
         <el-table-column prop="orderNo" label="订单号" />

@@ -1,6 +1,12 @@
 <template>
   <div class="page">
-    <div class="section-title">结算</div>
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">结算</p>
+        <h1>结算</h1>
+        <p class="page-subtitle">填写收货信息，确认订单明细。</p>
+      </div>
+    </header>
     <el-row :gutter="16">
       <el-col :xs="24" :md="14">
         <div class="card" style="padding: 16px;">
