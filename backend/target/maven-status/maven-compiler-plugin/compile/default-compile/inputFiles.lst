@@ -14,6 +14,7 @@
 /Users/shendada/Shopping System/backend/src/main/java/com/shop/controller/admin/AdminReportController.java
 /Users/shendada/Shopping System/backend/src/main/java/com/shop/dto/admin/CategorySalesReport.java
 /Users/shendada/Shopping System/backend/src/main/java/com/shop/dto/admin/DailyHotProductReport.java
+/Users/shendada/Shopping System/backend/src/main/java/com/shop/dto/admin/DailySalesDetailReport.java
 /Users/shendada/Shopping System/backend/src/main/java/com/shop/dto/admin/DailySalesReport.java
 /Users/shendada/Shopping System/backend/src/main/java/com/shop/dto/admin/ProductImageRequest.java
 /Users/shendada/Shopping System/backend/src/main/java/com/shop/dto/admin/ProductRequest.java

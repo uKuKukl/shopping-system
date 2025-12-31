@@ -38,3 +38,5 @@ Base URL: `http://localhost:8080`
   - `/api/admin/reports/product-sales`
   - `/api/admin/reports/category-sales`
   - `/api/admin/reports/daily-sales`
+  - `/api/admin/reports/daily-hot-products?topN=3`
+  - `/api/admin/reports/daily-sales-detail?date=YYYY-MM-DD`

@@ -45,6 +45,37 @@
         </div>
       </el-col>
     </el-row>
+
+    <el-row :gutter="16" style="margin-top: 16px;">
+      <el-col :span="24">
+        <div class="card" style="padding: 16px;">
+          <div class="section-title" style="font-size: 18px;">每日销售明细查询</div>
+          <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 12px;">
+            <el-date-picker
+              v-model="detailDate"
+              type="date"
+              placeholder="选择日期"
+              format="YYYY-MM-DD"
+              value-format="YYYY-MM-DD"
+            />
+            <el-button type="primary" @click="loadDailyDetail">查询</el-button>
+          </div>
+          <el-table
+            v-if="dailySalesDetailWithSummary.length"
+            :data="dailySalesDetailWithSummary"
+            style="width: 100%"
+            :row-class-name="rowClassName"
+          >
+            <el-table-column prop="paidDate" label="日期" width="140" />
+            <el-table-column prop="productName" label="商品" />
+            <el-table-column prop="totalQty" label="销量" width="100" />
+            <el-table-column prop="orderCount" label="订单数" width="100" />
+            <el-table-column prop="totalAmount" label="营业额" width="140" />
+          </el-table>
+          <div v-else class="muted">暂无数据</div>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -58,6 +89,8 @@ const categorySales = ref([])
 const dailySales = ref([])
 const dailyHotProducts = ref([])
 const topN = ref(3)
+const dailySalesDetail = ref([])
+const detailDate = ref('')
 const chartRef = ref(null)
 let chartInstance = null
 let resizeBound = false
@@ -70,6 +103,38 @@ const load = async () => {
     params: { topN: topN.value }
   })
 }
+
+const loadDailyDetail = async () => {
+  const params = detailDate.value ? { date: detailDate.value } : {}
+  dailySalesDetail.value = await api.get('/api/admin/reports/daily-sales-detail', { params })
+}
+
+const dailySalesDetailWithSummary = computed(() => {
+  if (!dailySalesDetail.value.length) return []
+  const totals = dailySalesDetail.value.reduce(
+    (acc, item) => {
+      acc.totalQty += Number(item.totalQty || 0)
+      acc.orderCount += Number(item.orderCount || 0)
+      acc.totalAmount += Number(item.totalAmount || 0)
+      return acc
+    },
+    { totalQty: 0, orderCount: 0, totalAmount: 0 }
+  )
+  const dateLabel = detailDate.value || '全部'
+  return [
+    ...dailySalesDetail.value,
+    {
+      paidDate: dateLabel,
+      productName: '合计',
+      totalQty: totals.totalQty,
+      orderCount: totals.orderCount,
+      totalAmount: totals.totalAmount,
+      isSummary: true
+    }
+  ]
+})
+
+const rowClassName = ({ row }) => (row.isSummary ? 'summary-row' : '')
 
 const renderChart = () => {
   if (!chartRef.value) return
@@ -171,5 +236,9 @@ const dailyHotGroups = computed(() => {
 .chart {
   width: 100%;
   height: 220px;
+}
+
+.summary-row td {
+  font-weight: 600;
 }
 </style>
