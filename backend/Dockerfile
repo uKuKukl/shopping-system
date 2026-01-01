@@ -1,5 +1,5 @@
 # --- 第一阶段：构建 ---
-FROM maven:3.9.9-eclipse-temurin-17 AS build
+FROM maven:3.9.9-jdk-17 AS build
 WORKDIR /app
 
 # 1. 优先复制依赖描述文件
@@ -18,7 +18,7 @@ COPY src ./src
 RUN mvn -s /root/.m2/settings.xml -q -DskipTests package
 
 # --- 第二阶段：运行 ---
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:17-jre-alpine-3.23 AS runtime
 WORKDIR /app
 
 # 为了防止 target 下有多个 jar 包导致 COPY 失败，
